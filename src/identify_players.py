@@ -2,9 +2,11 @@ from collections import defaultdict
 from math import hypot
 from pathlib import Path
 
+import json
 import cv2
 import numpy as np
 from ultralytics import YOLO
+from homography import load_homography, pixel_to_court
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 VIDEO_DIR = PROJECT_ROOT / "data" / "raw"
@@ -126,6 +128,17 @@ def main():
     video_path = video_files[0]
     print(f"Processing: {video_path.name}")
 
+    # load homography for vid
+    calibration_path = (
+        PROJECT_ROOT / "data" / "calibration" / f"{video_path.stem}.json"
+    )
+    if not calibration_path.exists():
+        raise FileNotFoundError(
+            f"No calibration found for {video_path.name}"
+        )
+    homography = load_homography(calibration_path)
+    print(f"Loaded calibration: {calibration_path.name}")
+
     # open vid and get props
     cap = cv2.VideoCapture(str(video_path))
     if not cap.isOpened():
@@ -151,6 +164,7 @@ def main():
     last_observations = {}
     states = None
     frame_index = 0
+    trajectory_frames = []
 
     try:
         while True:
@@ -196,21 +210,52 @@ def main():
                     x1, y1, x2, y2 = detection["bbox"]
                     foot_x, foot_y = detection["foot"]
                     
-                    # colro based on side
+                    # color based on side
                     color = ((0, 165, 255) if side == "far" else (0, 255, 0))
-
                     cv2.rectangle(frame, (x1, y1), (x2, y2), color, 2)
-                    
                     # estimate feet loc of ppl
                     cv2.circle(frame, (foot_x, foot_y), 5, color, -1)
-                    
                     cv2.putText(
                         frame, f"{side.capitalize()} Player ID {state['id']}",
                         (x1, max(y1 - 10, 20)), cv2.FONT_HERSHEY_SIMPLEX, 0.6, color, 2
                     )
 
             cv2.polylines(frame, [roi], True, (255, 255, 0), 2)
-            
+
+            # create one trajectory record per video frame
+            frame_record = {
+                "frame": frame_index,
+                "timestamp_s": round(frame_index / fps, 3),
+                "players": {
+                    "far": None,
+                    "near": None
+                }
+            }
+            if states is not None:
+                active_tracks = {
+                    detection["id"]: detection
+                    for detection in detections
+                }
+                for side, state in states.items():
+                    detection = active_tracks.get(state["id"])
+                    # don't record position if player missing
+                    if detection is None:
+                        continue
+                    # estimated grnd contact position in pixels
+                    foot_x, foot_y = detection["foot"]
+                    # convert pixels to meters
+                    court_x, court_y = pixel_to_court(
+                        foot_x, foot_y, homography
+                    )
+                    frame_record["players"][side] = {
+                        "track_id": state["id"],
+                        "foot_pixel": [foot_x, foot_y],
+                        "court_m": [
+                            round(court_x, 3),
+                            round(court_y, 3)
+                        ]
+                    }
+            trajectory_frames.append(frame_record)
             # save and advance frame
             writer.write(frame)
             frame_index += 1
@@ -223,6 +268,25 @@ def main():
 
     print(f"Processed {frame_index} frames")
     print(f"Saved to: {output_path}")
+
+    # export all player trajectories to JSON
+    trajectory_path = (
+        OUTPUT_DIR / f"{video_path.stem}_trajectories.json"
+    )
+    trajectory_data = {
+        "video": video_path.name,
+        "fps": fps,
+        "coordinate_system": {
+            "units": "meters",
+            "origin": "far-left baseline corner",
+            "x_direction": "toward far-right baseline corner",
+            "y_direction": "toward near baseline"
+        },
+        "frames": trajectory_frames
+    }
+    with open(trajectory_path, "w") as file:
+        json.dump(trajectory_data, file, indent=2)
+    print(f"Saved trajectories to: {trajectory_path}")
 
 if __name__ == "__main__":
     main()
