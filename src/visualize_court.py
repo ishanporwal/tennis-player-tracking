@@ -107,7 +107,7 @@ def main():
     if fps <= 0:
         raise ValueError("FPS must be positive")
 
-    output_path = input_path.parent / f"{Path(data['video']).stem}_overhead.mp4"
+    output_path = input_path.with_name(f"{input_path.stem}_overhead.mp4")
 
     writer = cv2.VideoWriter(
         str(output_path), cv2.VideoWriter_fourcc(*"mp4v"), fps, (WIDTH, HEIGHT)
@@ -158,7 +158,7 @@ def main():
                 (30, 78), cv2.FONT_HERSHEY_SIMPLEX, 0.55, WHITE, 1
             )
             cv2.putText(
-                image, "Raw measurements (no smoothing)",
+                image, ("Kalman filtered positions" if "filter" in data else "Raw measurements (no smoothing)"),
                 (30, HEIGHT - 30), cv2.FONT_HERSHEY_SIMPLEX, 0.55, WHITE, 1
             )
 
