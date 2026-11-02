@@ -1,0 +1,681 @@
+{
+  "video": "sinner_alcaraz_1.mp4",
+  "annotations": [
+    {
+      "frame": 65,
+      "timestamp_s": 2.188,
+      "players": {
+        "far": {
+          "foot_pixel": [
+            685,
+            242
+          ],
+          "court_m": [
+            1.4,
+            -1.177
+          ]
+        },
+        "near": {
+          "foot_pixel": [
+            989,
+            822
+          ],
+          "court_m": [
+            5.761,
+            23.535
+          ]
+        }
+      }
+    },
+    {
+      "frame": 101,
+      "timestamp_s": 3.399,
+      "players": {
+        "far": {
+          "foot_pixel": [
+            936,
+            227
+          ],
+          "court_m": [
+            5.148,
+            -2.443
+          ]
+        },
+        "near": {
+          "foot_pixel": [
+            757,
+            840
+          ],
+          "court_m": [
+            4.122,
+            23.906
+          ]
+        }
+      }
+    },
+    {
+      "frame": 137,
+      "timestamp_s": 4.611,
+      "players": {
+        "far": {
+          "foot_pixel": [
+            1136,
+            227
+          ],
+          "court_m": [
+            8.203,
+            -2.358
+          ]
+        },
+        "near": {
+          "foot_pixel": [
+            882,
+            925
+          ],
+          "court_m": [
+            5.045,
+            25.462
+          ]
+        }
+      }
+    },
+    {
+      "frame": 174,
+      "timestamp_s": 5.856,
+      "players": {
+        "far": {
+          "foot_pixel": [
+            1024,
+            226
+          ],
+          "court_m": [
+            6.497,
+            -2.499
+          ]
+        },
+        "near": {
+          "foot_pixel": [
+            779,
+            830
+          ],
+          "court_m": [
+            4.266,
+            23.705
+          ]
+        }
+      }
+    },
+    {
+      "frame": 210,
+      "timestamp_s": 7.068,
+      "players": {
+        "far": {
+          "foot_pixel": [
+            843,
+            230
+          ],
+          "court_m": [
+            3.73,
+            -2.203
+          ]
+        },
+        "near": {
+          "foot_pixel": [
+            1026,
+            904
+          ],
+          "court_m": [
+            5.996,
+            25.09
+          ]
+        }
+      }
+    },
+    {
+      "frame": 246,
+      "timestamp_s": 8.28,
+      "players": {
+        "far": {
+          "foot_pixel": [
+            848,
+            219
+          ],
+          "court_m": [
+            3.768,
+            -3.242
+          ]
+        },
+        "near": {
+          "foot_pixel": [
+            1579,
+            867
+          ],
+          "court_m": [
+            9.789,
+            24.389
+          ]
+        }
+      }
+    },
+    {
+      "frame": 260,
+      "timestamp_s": 8.751,
+      "players": {
+        "far": {
+          "foot_pixel": [
+            770,
+            218
+          ],
+          "court_m": [
+            2.541,
+            -3.374
+          ]
+        },
+        "near": {
+          "foot_pixel": [
+            1602,
+            878
+          ],
+          "court_m": [
+            9.905,
+            24.593
+          ]
+        }
+      }
+    },
+    {
+      "frame": 283,
+      "timestamp_s": 9.525,
+      "players": {
+        "far": {
+          "foot_pixel": [
+            710,
+            224
+          ],
+          "court_m": [
+            1.643,
+            -2.823
+          ]
+        },
+        "near": {
+          "foot_pixel": [
+            1144,
+            866
+          ],
+          "court_m": [
+            6.82,
+            24.39
+          ]
+        }
+      }
+    },
+    {
+      "frame": 319,
+      "timestamp_s": 10.737,
+      "players": {
+        "far": {
+          "foot_pixel": [
+            926,
+            221
+          ],
+          "court_m": [
+            4.987,
+            -3.015
+          ]
+        },
+        "near": {
+          "foot_pixel": [
+            864,
+            806
+          ],
+          "court_m": [
+            4.856,
+            23.209
+          ]
+        }
+      }
+    },
+    {
+      "frame": 346,
+      "timestamp_s": 11.645,
+      "players": {
+        "far": {
+          "foot_pixel": [
+            1130,
+            219
+          ],
+          "court_m": [
+            8.151,
+            -3.116
+          ]
+        },
+        "near": {
+          "foot_pixel": [
+            786,
+            854
+          ],
+          "court_m": [
+            4.342,
+            24.178
+          ]
+        }
+      }
+    },
+    {
+      "frame": 355,
+      "timestamp_s": 11.948,
+      "players": {
+        "far": {
+          "foot_pixel": [
+            1134,
+            222
+          ],
+          "court_m": [
+            8.197,
+            -2.828
+          ]
+        },
+        "near": {
+          "foot_pixel": [
+            776,
+            866
+          ],
+          "court_m": [
+            4.286,
+            24.407
+          ]
+        }
+      }
+    },
+    {
+      "frame": 392,
+      "timestamp_s": 13.194,
+      "players": {
+        "far": {
+          "foot_pixel": [
+            1029,
+            218
+          ],
+          "court_m": [
+            6.589,
+            -3.257
+          ]
+        },
+        "near": {
+          "foot_pixel": [
+            640,
+            851
+          ],
+          "court_m": [
+            3.316,
+            24.126
+          ]
+        }
+      }
+    },
+    {
+      "frame": 428,
+      "timestamp_s": 14.405,
+      "players": {
+        "far": {
+          "foot_pixel": [
+            1210,
+            221
+          ],
+          "court_m": [
+            9.371,
+            -2.89
+          ]
+        },
+        "near": {
+          "foot_pixel": [
+            659,
+            858
+          ],
+          "court_m": [
+            3.463,
+            24.26
+          ]
+        }
+      }
+    },
+    {
+      "frame": 465,
+      "timestamp_s": 15.651,
+      "players": {
+        "far": {
+          "foot_pixel": [
+            1085,
+            222
+          ],
+          "court_m": [
+            7.444,
+            -2.85
+          ]
+        },
+        "near": {
+          "foot_pixel": [
+            480,
+            757
+          ],
+          "court_m": [
+            1.887,
+            22.143
+          ]
+        }
+      }
+    },
+    {
+      "frame": 475,
+      "timestamp_s": 15.987,
+      "players": {
+        "far": {
+          "foot_pixel": [
+            1069,
+            232
+          ],
+          "court_m": [
+            7.167,
+            -1.925
+          ]
+        },
+        "near": {
+          "foot_pixel": [
+            462,
+            750
+          ],
+          "court_m": [
+            1.724,
+            21.981
+          ]
+        }
+      }
+    },
+    {
+      "frame": 477,
+      "timestamp_s": 16.055,
+      "players": {
+        "far": {
+          "foot_pixel": [
+            1082,
+            235
+          ],
+          "court_m": [
+            7.353,
+            -1.647
+          ]
+        },
+        "near": {
+          "foot_pixel": [
+            477,
+            754
+          ],
+          "court_m": [
+            1.854,
+            22.073
+          ]
+        }
+      }
+    },
+    {
+      "frame": 501,
+      "timestamp_s": 16.862,
+      "players": {
+        "far": {
+          "foot_pixel": [
+            1210,
+            238
+          ],
+          "court_m": [
+            9.25,
+            -1.327
+          ]
+        },
+        "near": {
+          "foot_pixel": [
+            638,
+            816
+          ],
+          "court_m": [
+            3.23,
+            23.425
+          ]
+        }
+      }
+    },
+    {
+      "frame": 511,
+      "timestamp_s": 17.199,
+      "players": {
+        "far": {
+          "foot_pixel": [
+            1211,
+            238
+          ],
+          "court_m": [
+            9.265,
+            -1.327
+          ]
+        },
+        "near": {
+          "foot_pixel": [
+            651,
+            846
+          ],
+          "court_m": [
+            3.384,
+            24.028
+          ]
+        }
+      }
+    },
+    {
+      "frame": 537,
+      "timestamp_s": 18.074,
+      "players": {
+        "far": {
+          "foot_pixel": [
+            1147,
+            230
+          ],
+          "court_m": [
+            8.354,
+            -2.076
+          ]
+        },
+        "near": {
+          "foot_pixel": [
+            520,
+            811
+          ],
+          "court_m": [
+            2.361,
+            23.326
+          ]
+        }
+      }
+    },
+    {
+      "frame": 574,
+      "timestamp_s": 19.319,
+      "players": {
+        "far": {
+          "foot_pixel": [
+            1170,
+            227
+          ],
+          "court_m": [
+            8.72,
+            -2.344
+          ]
+        },
+        "near": {
+          "foot_pixel": [
+            552,
+            794
+          ],
+          "court_m": [
+            2.547,
+            22.965
+          ]
+        }
+      }
+    },
+    {
+      "frame": 610,
+      "timestamp_s": 20.531,
+      "players": {
+        "far": {
+          "foot_pixel": [
+            1349,
+            246
+          ],
+          "court_m": [
+            11.227,
+            -0.574
+          ]
+        },
+        "near": {
+          "foot_pixel": [
+            765,
+            915
+          ],
+          "court_m": [
+            4.266,
+            25.296
+          ]
+        }
+      }
+    },
+    {
+      "frame": 646,
+      "timestamp_s": 21.743,
+      "players": {
+        "far": {
+          "foot_pixel": [
+            1125,
+            230
+          ],
+          "court_m": [
+            8.022,
+            -2.085
+          ]
+        },
+        "near": {
+          "foot_pixel": [
+            443,
+            930
+          ],
+          "court_m": [
+            2.169,
+            25.571
+          ]
+        }
+      }
+    },
+    {
+      "frame": 683,
+      "timestamp_s": 22.988,
+      "players": {
+        "far": {
+          "foot_pixel": [
+            872,
+            250
+          ],
+          "court_m": [
+            4.225,
+            -0.406
+          ]
+        },
+        "near": {
+          "foot_pixel": [
+            986,
+            1003
+          ],
+          "court_m": [
+            5.718,
+            26.709
+          ]
+        }
+      }
+    },
+    {
+      "frame": 719,
+      "timestamp_s": 24.2,
+      "players": {
+        "far": {
+          "foot_pixel": [
+            909,
+            315
+          ],
+          "court_m": [
+            4.857,
+            4.591
+          ]
+        },
+        "near": {
+          "foot_pixel": [
+            430,
+            1003
+          ],
+          "court_m": [
+            2.281,
+            26.742
+          ]
+        }
+      }
+    },
+    {
+      "frame": 720,
+      "timestamp_s": 24.233,
+      "players": {
+        "far": {
+          "foot_pixel": [
+            914,
+            310
+          ],
+          "court_m": [
+            4.917,
+            4.247
+          ]
+        },
+        "near": {
+          "foot_pixel": [
+            413,
+            1003
+          ],
+          "court_m": [
+            2.176,
+            26.743
+          ]
+        }
+      }
+    },
+    {
+      "frame": 756,
+      "timestamp_s": 25.445,
+      "players": {
+        "far": {
+          "foot_pixel": [
+            728,
+            354
+          ],
+          "court_m": [
+            2.661,
+            7.067
+          ]
+        },
+        "near": {
+          "foot_pixel": [
+            706,
+            907
+          ],
+          "court_m": [
+            3.863,
+            25.159
+          ]
+        }
+      }
+    }
+  ]
+}
