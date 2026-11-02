@@ -2,7 +2,7 @@ from pathlib import Path
 import cv2
 from ultralytics import YOLO
 
-PROJECT_ROOT = Path(__file__).resolve().parent.parent
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
 VIDEO_DIR = PROJECT_ROOT / "data" / "raw"
 OUTPUT_DIR = PROJECT_ROOT / "outputs"
 
