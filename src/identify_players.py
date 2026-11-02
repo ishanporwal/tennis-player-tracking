@@ -2,6 +2,7 @@ from collections import defaultdict
 from math import hypot
 from pathlib import Path
 
+import argparse
 import json
 import cv2
 import numpy as np
@@ -121,13 +122,25 @@ def reassociate_players(states, detections, frame_index, fps, height, net_y, roi
 
 def main():
     OUTPUT_DIR.mkdir(exist_ok=True)
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--video",
+        default=None,
+        help="Name of the input video in data/raw/"
+    )
+    args = parser.parse_args()
     video_files = sorted(VIDEO_DIR.glob("*.mp4"))
     if not video_files:
-        raise FileNotFoundError("No MP4 videos in data/raw/")
-
-    video_path = video_files[0]
+        raise FileNotFoundError("No MP4 videos found in data/raw/")
+    video_path = (
+        VIDEO_DIR / args.video
+        if args.video
+        else video_files[0]
+    )
+    if not video_path.is_file():
+        raise FileNotFoundError(f"Video not found: {video_path}")
     print(f"Processing: {video_path.name}")
-
+    
     # load homography for vid
     calibration_path = (
         PROJECT_ROOT / "data" / "calibration" / f"{video_path.stem}.json"
