@@ -12,7 +12,10 @@ def load_homography(calibration_path):
 
 def pixel_to_court(pixel_x, pixel_y, homography):
     # convert image pixel coordinates to court coordinates in meters
+    # persepectiveTransform expects 3D array
     point = np.array([[[pixel_x, pixel_y]]], dtype=np.float32)
+    # take original pixel pos and apply homography transformation
     transformed = cv2.perspectiveTransform(point, homography)
+    # unpack resulting array to court coords
     court_x, court_y = transformed[0][0]
     return float(court_x), float(court_y)

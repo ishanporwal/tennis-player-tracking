@@ -5,118 +5,175 @@ import numpy as np
 
 
 class KalmanFilter:
-    def __init__(self, fps, meas_std=0.4, acc_std=8.0, max_gap_s=0.5):
+    def __init__(
+            self,
+            fps,            # fps so we know how much time passes between frames
+            meas_std=0.4,   # expect measurement error with std dev of 0.4 m/coord
+            acc_std=8.0,    # allow sig. uncertainty in how player vel changes
+            max_gap_s=0.5   # keep predicting position for up to 0.5 s if out of sight
+        ):
         self.dt = 1.0 / fps
+        # state vector -> stores player pos and vel
         self.state = None
+        # covariance 4x4 matrix for x,y,xvel,yvel
         self.P = None
+        # count consecutive rames wher ewe don't have player pos measurement
         self.missed = 0
+        # how many missing frames we're ok predicting through
         self.max_missed = max(1, round(max_gap_s * fps))
         self.meas_std = meas_std
 
-        # standard cv model matrices
+        # standard constant velocity model matrices
+        # state transition matrix
         self.F = np.array([
-            [1, 0, self.dt, 0],
-            [0, 1, 0, self.dt],
-            [0, 0, 1, 0],
-            [0, 0, 0, 1]
+            [1, 0, self.dt, 0], # xnxt = x + vx*dt
+            [0, 1, 0, self.dt], # ynxt = y + vy*dt
+            [0, 0, 1, 0],       # vxnxt = vx
+            [0, 0, 0, 1]        # vynxt = vy
         ], dtype=float)
+
+        # observation matrix
         self.H = np.array([
-            [1, 0, 0, 0],
-            [0, 1, 0, 0]
+            [1, 0, 0, 0],   # extract estimated horizontal pos
+            [0, 1, 0, 0]    # extract estimated vertical pos
         ], dtype=float)
+
+        # constant uncertainty in measured player positions
+        # larger R = noisy measurements -> rely on predictions more
         self.R = np.eye(2) * meas_std**2
+
+        # handle wrong cv prediction due to accel
         G = np.array([
-            [0.5 * self.dt**2, 0],
-            [0, 0.5 * self.dt**2],
-            [self.dt, 0],
-            [0, self.dt]
+            [0.5 * self.dt**2, 0],  # dx due to accx
+            [0, 0.5 * self.dt**2],  # dy due to accy
+            [self.dt, 0],           # dvx due to accx
+            [0, self.dt]            # dvy due to accy
         ])
+        # process noise covariance matrix
+        # multiply G by transpose to make 4x4
+        # larger Q = prediction uncertainty increases
         self.Q = acc_std**2 * (G @ G.T)
 
     def step(self, measurement):
+        # check whether kalman filter has been init
         if self.state is None:
+            # don't have filter + don't have measurment = can't do anything
             if measurement is None:
                 return None, "missing"
             
-            # init on first observation
+            # init state vector if detecting for first time
+            # only one observation so can't estimate velocity
             self.state = np.array([measurement[0], measurement[1], 0, 0], dtype=float)
+            # init covariance matrix assuming 3 m/s vel uncertainty
             self.P = np.diag([self.meas_std**2, self.meas_std**2, 9.0, 9.0])
+            # reset missed-detection counter since we have valid measurement
             self.missed = 0
+            # return initialized position
             return self.state[:2].copy(), "measurement"
 
-        # predict
+        # predict player's next state based on state transisiton matrix
         self.state = self.F @ self.state
+        # predict new uncertainty = existing uncertainty change + uncertainty from noise
+        # multiply by transpose to handle both sides of covariance relationship
         self.P = self.F @ self.P @ self.F.T + self.Q
 
+        # if not measurement to compare to
         if measurement is None:
+            # update consecutive frames with missing measurement
             self.missed += 1
+            # reset if missing gap is too big
             if self.missed > self.max_missed:
                 self.state = None
                 self.P = None
                 return None, "missing"
+            # otherwise use our predicted coordinates to update
             return self.state[:2].copy(), "prediction"
-
+        # if we have a measurement, reset missing measurement count
         self.missed = 0
 
-        # update
+        # convert our measurement to npy array
         z = np.array(measurement, dtype=float)
+        # calculate the residual between prediction and measurement
+        # use H to convert actual measurement to usable 2 val pos
         y = z - self.H @ self.state
+        # calc expected uncertainty in measurement - prediction
         S = self.H @ self.P @ self.H.T + self.R
+        # calc kalman gain
         K = np.linalg.solve(S, (self.P @ self.H.T).T).T
+        # correct predicted pos and vel based on kalman gain from measurement 
         self.state = self.state + K @ y
         I = np.eye(4)
+        # calc remaining uncertainty from prediction after new measurement
+        # lower L = larger A = rely more on prediction = more of its uncertainty
         A = I - K @ self.H
+        # update covariance matrix based on remaining prediction + measurement uncertainty
         self.P = A @ self.P @ A.T + K @ self.R @ K.T
+        # return filtered player pos
         return self.state[:2].copy(), "measurement"
 
 
 def main():
+    # take input of trajectories JSON file generated by identify_players
     parser = argparse.ArgumentParser()
     parser.add_argument("--input", required=True)
     args = parser.parse_args()
-
+    # load trajectories and fps
     in_path = Path(args.input)
     with open(in_path) as f:
         data = json.load(f)
     fps = float(data["fps"])
+    # check that fps isn't 0 or negative
     if fps <= 0:
         raise ValueError("fps must be > 0")
+    # create independent Kalman filter per player
     filters = {"far": KalmanFilter(fps), "near": KalmanFilter(fps)}
+    # initialize stats to eval tracking + kalman filtering per player
     counts = {side: {"measurement": 0, "prediction": 0, "missing": 0} for side in filters}
+    # list to store output frames with smoothened pos
     smoothed_frames = []
+    # loop through every frame
     for frame in data["frames"]:
+        # create new dict for cur output frame
         out_frame = {
             "frame": frame["frame"],
             "timestamp_s": frame["timestamp_s"],
             "players": {}
         }
+        # loop through players
         for side, raw_player in frame["players"].items():
+            # if possible extract measured court pos
             raw_pos = raw_player["court_m"] if raw_player else None
+            # call the player's kalman filter on the court pos
             pos, source = filters[side].step(raw_pos)
+            # update summary of counts
             counts[side][source] += 1
+            # if no estimated position, store None and move to next frame
             if pos is None:
                 out_frame["players"][side] = None
                 continue
-            # carry over existing metadata or init empty
+            # create copy of existing metadata or init empty so we don't modify original
             record = dict(raw_player) if raw_player else {"track_id": None, "foot_pixel": None}
             record.update({
                 "raw_court_m": raw_pos,
                 "court_m": [round(float(pos[0]), 3), round(float(pos[1]), 3)],
                 "position_source": source
             })
+            # store completed record for player
             out_frame["players"][side] = record
+        # after both players processed, add entire frame dict to list
         smoothed_frames.append(out_frame)
-
+    # preserve top-level metadata and replace original frames with smoothened frames
     out_data = {
-        **data,
+        **data,     # copy key-val pairs from data into new dict
         "filter": {"type": "constant_velocity_kalman"},
         "frames": smoothed_frames
     }
 
+    # generate output filename and write JSON to it (overwrite)
     out_path = in_path.with_name(f"{in_path.stem}_smoothed.json")
     with open(out_path, "w") as f:
         json.dump(out_data, f, indent=2)
-
+    # print the results of counts dict
     print(f"saved: {out_path} ({len(smoothed_frames)} frames)")
     for side, stats in counts.items():
         print(f"{side}: {stats}")
