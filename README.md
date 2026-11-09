@@ -75,6 +75,10 @@ Our biggest takeaway was that detecting an object is only the first step. We als
 
 This is similar to perception in real robotic systems. A robot may detect a person with a camera, track them across frames, estimate their position in a world coordinate system, and predict their movement when they are temporarily out of view. Of course, in our case the camera is fixed rather than mounted on a moving robot, but the problems surroudning tracking, transformations, and uncertainty are very closely related.
 
+## Contributions
+
+We worked together on all aspects of this project.
+
 ## Running the project
 
 Place a match video in `data/raw/` (the raw videos we used aren't included in the repo). Calibration files for our two test clips are in `data/calibration/`. For a new fixed camera view, run `src/calibrate_court.py` first and select the four outer court corners.
